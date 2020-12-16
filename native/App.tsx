@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Linking, Alert, Button, Platform} from 'react-native';
+import {Linking, Alert, Platform, SafeAreaView} from 'react-native';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import {WebView} from 'react-native-webview';
 
@@ -53,9 +53,9 @@ const App = () => {
   }, []);
 
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <SafeAreaView style={{flex: 1}}>
       {Platform.OS === 'android' && <WebView source={{uri: url}} />}
-    </View>
+    </SafeAreaView>
   );
 };
 
