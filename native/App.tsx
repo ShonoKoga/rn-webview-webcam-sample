@@ -50,6 +50,7 @@ const App = () => {
   const checkPermission = async () => {
     const result = await Permissions.check(PERMISSIONS.ANDROID.CAMERA);
     console.log('check', result);
+    setIsShow(result === RESULTS.GRANTED);
     if (result === RESULTS.DENIED) {
       const result = await Permissions.request(PERMISSIONS.ANDROID.CAMERA);
       console.warn('request', result);
@@ -69,7 +70,7 @@ const App = () => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      {Platform.OS === 'android' && (
+      {Platform.OS === 'android' && isShow && (
         <WebView
           source={{uri: url}}
           geolocationEnabled={true}
