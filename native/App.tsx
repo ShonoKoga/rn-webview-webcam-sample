@@ -1,13 +1,12 @@
-import React from 'react';
-import {View, Linking, Alert, Button} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, Linking, Alert, Button, Platform} from 'react-native';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
-// import {WebView} from 'react-native-webview';
+import {WebView} from 'react-native-webview';
 
 const url = 'https://rn-webview-webcam-sample.vercel.app/';
 
 const App = () => {
   const openLink = async () => {
-    console.warn(InAppBrowser.isAvailable());
     try {
       if (await InAppBrowser.isAvailable()) {
         const result = await InAppBrowser.open(url, {
@@ -47,9 +46,15 @@ const App = () => {
     }
   };
 
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      openLink();
+    }
+  }, []);
+
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Button onPress={openLink} title="Try Camera" />
+      {Platform.OS === 'android' && <WebView source={{uri: url}} />}
     </View>
   );
 };
