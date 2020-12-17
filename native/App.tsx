@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Linking, Alert, Platform, SafeAreaView} from 'react-native';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import {WebView} from 'react-native-webview';
-import Permissions, {PERMISSIONS, RESULTS} from 'react-native-permissions';
 
 const url = 'https://rn-webview-webcam-sample.vercel.app/';
 
@@ -47,52 +46,19 @@ const App = () => {
     }
   };
 
-  const checkPermission = async () => {
-    const result = await Permissions.checkMultiple([
-      PERMISSIONS.ANDROID.CAMERA,
-      PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
-    ]);
-    console.log('check', result);
-    const granted =
-      result['android.permission.CAMERA'] === RESULTS.GRANTED &&
-      result['android.permission.READ_EXTERNAL_STORAGE'] === RESULTS.GRANTED;
-
-    if (granted) {
-      setIsShow(true);
-    } else {
-      const result = await Permissions.requestMultiple([
-        PERMISSIONS.ANDROID.CAMERA,
-        PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
-      ]);
-      console.warn('request', result);
-      const granted =
-        result['android.permission.CAMERA'] === RESULTS.GRANTED &&
-        result['android.permission.READ_EXTERNAL_STORAGE'] === RESULTS.GRANTED;
-      if (granted) {
-        setIsShow(true);
-      }
-    }
-  };
-
-  const [isShow, setIsShow] = useState(false);
-
   useEffect(() => {
     if (Platform.OS === 'ios') {
       openLink();
-    } else {
-      checkPermission();
     }
   }, []);
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      {Platform.OS === 'android' && isShow && (
-        <WebView
-          source={{uri: url}}
-          mediaPlaybackRequiresUserAction={false}
-          javaScriptEnabled={true}
-        />
-      )}
+      <WebView
+        source={{uri: url}}
+        mediaPlaybackRequiresUserAction={false}
+        javaScriptEnabled={true}
+      />
     </SafeAreaView>
   );
 };
