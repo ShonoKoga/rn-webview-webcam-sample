@@ -1,25 +1,29 @@
-import React from 'react'
-// import Webcam from "react-webcam";
+import { useEffect, useRef } from "react";
 
-export default () => {
-  React.useEffect(() => {
-    const getMedia = async () => {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          width: 250,
-          height: 250,
-        },
-        audio: false,
-      });
-      window.alert(JSON.stringify(stream))
-    };
-    getMedia();
+const App = () => {
+  const videoRef = useRef(null);
+  useEffect(() => {
+    (async () => {
+      const { mediaDevices } = navigator;
+      const video = videoRef.current;
+      if (mediaDevices && video !== null) {
+        const stream = await mediaDevices.getUserMedia({
+          video: {
+            width: 500,
+            height: 500,
+          },
+          audio: false,
+        });
+        video.srcObject = stream;
+      }
+    })();
   }, []);
 
   return (
     <div>
-      <h1>WebCam</h1>
-      {/* <Webcam onUserMediaError={(e) => window.alert(e)} /> */}
+      <video autoPlay ref={videoRef} />
     </div>
   );
 };
+
+export default App;
