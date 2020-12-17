@@ -4,7 +4,7 @@ export default () => {
   return (
     <div>
       <h1>WebCam</h1>
-      <Webcam />
+      <Webcam onUserMediaError={(e) => window.alert(e)}/>
     </div>
   );
 };

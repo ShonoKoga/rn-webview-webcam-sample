@@ -48,13 +48,29 @@ const App = () => {
   };
 
   const checkPermission = async () => {
-    const result = await Permissions.check(PERMISSIONS.ANDROID.CAMERA);
+    const result = await Permissions.checkMultiple([
+      PERMISSIONS.ANDROID.CAMERA,
+      PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+    ]);
     console.log('check', result);
-    setIsShow(result === RESULTS.GRANTED);
-    if (result === RESULTS.DENIED) {
-      const result = await Permissions.request(PERMISSIONS.ANDROID.CAMERA);
+    const granted =
+      result['android.permission.CAMERA'] === RESULTS.GRANTED &&
+      result['android.permission.READ_EXTERNAL_STORAGE'] === RESULTS.GRANTED;
+
+    if (granted) {
+      setIsShow(true);
+    } else {
+      const result = await Permissions.requestMultiple([
+        PERMISSIONS.ANDROID.CAMERA,
+        PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+      ]);
       console.warn('request', result);
-      setIsShow(result === RESULTS.GRANTED);
+      const granted =
+        result['android.permission.CAMERA'] === RESULTS.GRANTED &&
+        result['android.permission.READ_EXTERNAL_STORAGE'] === RESULTS.GRANTED;
+      if (granted) {
+        setIsShow(true);
+      }
     }
   };
 
@@ -73,7 +89,6 @@ const App = () => {
       {Platform.OS === 'android' && isShow && (
         <WebView
           source={{uri: url}}
-          geolocationEnabled={true}
           mediaPlaybackRequiresUserAction={false}
           javaScriptEnabled={true}
         />
