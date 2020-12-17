@@ -11,7 +11,7 @@ export default () => {
         },
         audio: false,
       });
-      window.alert(stream)
+      window.alert(JSON.stringify(stream))
     };
     getMedia();
   }, []);
